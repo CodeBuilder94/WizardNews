@@ -1,7 +1,11 @@
 const express = require("express");
 const morgan = require('morgan');
 const postBank = require('./postBank');
+
 const app = express();
+
+app.use(express.static('public'));
+
 app.use(morgan('dem'));
 
 
