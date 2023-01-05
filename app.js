@@ -1,8 +1,12 @@
 const express = require("express");
+const morgan = require('morgan');
+const postBank = require('./postBank');
 const app = express();
+app.use(morgan('dem'));
+
 
 app.get('/',(req, res)=>{
-  const posts = postBank.lists();
+  const posts = postBank.list();
 
   const html = `<!DOCTYPE html>
    <html>
@@ -10,7 +14,7 @@ app.get('/',(req, res)=>{
    <head> 
    <body>
   <ul>
-  ${posts.map(post => '<li>${post.title}</1i>')}
+  ${posts.map(post => `<li>${post.title}</1i>`)}
    </ul> 
   </body>
   </html>`
