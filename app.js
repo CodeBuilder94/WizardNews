@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require('morgan');
+const timeAgo = require('node-time-ago');
 const postBank = require('./postBank');
 
 const app = express();
@@ -32,7 +33,7 @@ app.get('/posts/:id', (req, res) => {
         <p>${post.title} <small>(by ${post.name}) </small></p>
         <p>${post.content}</p>
         <small class="news-info">
-          ${post.upvotes} upvotes | ${post.data}
+          ${post.upvotes} upvotes | ${post.date}
         </small>
       </div>
       </body>
@@ -62,7 +63,7 @@ app.get('/',(req, res)=>{
               <small> (by ${post.name})</small>
             </p>
             <small class="news-info">
-              ${post.upvotes} upvotes | ${post.data}
+              ${post.upvotes} upvotes | ${timeAgo(new Date(post.date))}
             </small>
           </div>
         `).join("")}
@@ -75,25 +76,6 @@ app.get('/',(req, res)=>{
 
 const PORT = 1337;
 
-/*function errorHandler (err, req, res, next)
-{
-  res.status(404);
-  const html =`<!DOCTYPE html>
-  <html>
-  <head>
-    <title>Wizard News</title>
-    <link rel="stylesheet" href="/style.css" />
-  </head>
-  <body>
-    <header><img src="/logo.png"/>Wizard News</header>
-    <div class="not-found">
-      <p>Accio Page! 🧙‍♀️ ... Page Not Found</p>
-      <img src="/dumbledore-404.gif" />
-    </div>
-  </body>
-  </html>`;
-  res.send(html);
-}*/
 app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(404).send(`<!DOCTYPE html>
