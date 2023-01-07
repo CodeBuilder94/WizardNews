@@ -74,7 +74,7 @@ app.get('/',(req, res)=>{
   res.send (html)
 });
 
-const PORT = 1337;
+const {PORT = 1337} = process.env;
 
 app.use((err, req, res, next) => {
   console.error(err.stack)
