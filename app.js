@@ -33,7 +33,7 @@ app.get('/posts/:id', (req, res) => {
         <p>${post.title} <small>(by ${post.name}) </small></p>
         <p>${post.content}</p>
         <small class="news-info">
-          ${post.upvotes} upvotes | ${post.date}
+          ${post.upvotes} upvotes | ${timeAgo(new Date(post.date))}
         </small>
       </div>
       </body>
