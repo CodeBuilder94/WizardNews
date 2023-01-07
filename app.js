@@ -8,25 +8,37 @@ app.use(express.static('public'));
 
 app.use(morgan('dem'));
 
+
 app.get('/posts/:id', (req, res) => {
   const id = req.params.id;
   const post = postBank.find(id);
-  console.log(post)
-  res.send(`<!DOCTYPE html>
-  <html>
-   <head>
-   <title>Wizard News</title>
-        <link rel="stylesheet" href="/style.css"/>
-    </head> 
-    <body> 
-    <div class='news-list'>
-    <header><img src="/logo.png"/>Wizard News</header>
-    <p>${post.title} <small>(by ${post.name}) </small></p>
-    <p>${post.content}</p>
-    </div>
-    </body>
-    </html>`
-     );
+  
+  if(!post.id)
+  {
+      //throw error for when post isn't found
+      throw new Error('Not Found');
+  }
+  else
+  {
+    res.send(`<!DOCTYPE html>
+    <html>
+    <head>
+    <title>Wizard News</title>
+          <link rel="stylesheet" href="/style.css"/>
+      </head> 
+      <body> 
+      <div class='news-list'>
+        <header><img src="/logo.png"/>Wizard News</header>
+        <p>${post.title} <small>(by ${post.name}) </small></p>
+        <p>${post.content}</p>
+        <small class="news-info">
+          ${post.upvotes} upvotes | ${post.data}
+        </small>
+      </div>
+      </body>
+      </html>`
+      );
+  }    
 });
 
 
@@ -62,6 +74,43 @@ app.get('/',(req, res)=>{
 });
 
 const PORT = 1337;
+
+/*function errorHandler (err, req, res, next)
+{
+  res.status(404);
+  const html =`<!DOCTYPE html>
+  <html>
+  <head>
+    <title>Wizard News</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header><img src="/logo.png"/>Wizard News</header>
+    <div class="not-found">
+      <p>Accio Page! 🧙‍♀️ ... Page Not Found</p>
+      <img src="/dumbledore-404.gif" />
+    </div>
+  </body>
+  </html>`;
+  res.send(html);
+}*/
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(404).send(`<!DOCTYPE html>
+  <html>
+  <head>
+    <title>Wizard News</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header><img src="/logo.png"/>Wizard News</header>
+    <div class="not-found">
+      <p>Accio Page! 🧙‍♀️ ... Page Not Found</p>
+      <img src="/dumbledore-404.gif" />
+    </div>
+  </body>
+  </html>`)
+})
 
 app.listen(PORT, () => {
   console.log(`App listening in port ${PORT}`);
